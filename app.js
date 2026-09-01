@@ -215,6 +215,7 @@
       var chosen = files[0];
       var parsed = parseOrderedName(slot.slotName);
       var chart = {
+        id: "chart-" + slugify(key),
         section: slot.section.id,
         order: parsed.order,
         title: parsed.title,
@@ -245,6 +246,7 @@
   /* ============================== gallery (image cards) ============================== */
   function buildCard(chart) {
     var card = el("div", "chart-card");
+    card.id = chart.id;
 
     var head = el("div", "chart-card-head");
     var titleWrap = document.createElement("div");
@@ -409,18 +411,32 @@
       groupHost.appendChild(section);
 
       if (nav) {
-        var navGroup = el("div", "nav-group");
-        var label = el("div", "nav-label");
-        label.textContent = sec.label;
-        var link = document.createElement("a");
-        link.className = "nav-link" + (si === 0 ? " active" : "");
-        link.href = "#" + sec.id;
-        var linkText = document.createElement("span");
-        linkText.textContent = chartsInSection.length === 1 ? chartsInSection[0].title : "Ver gráficos";
+        // A tema (subtópico) is also a native <details> disclosure, nested
+        // one level inside its assunto (or standalone, if ungrouped) — same
+        // closed-by-default, no-extra-JS pattern as the assunto level above.
+        // What it discloses is one link per chart, jumping straight to that
+        // chart's card via the id buildCard() gave it.
+        var navGroup = el("details", "nav-group");
+        var navGroupLabel = el("summary", "nav-group-label");
+        var labelText = document.createElement("span");
+        labelText.textContent = sec.label;
         var n = el("span", "n");
         n.textContent = String(chartsInSection.length).padStart(2, "0");
-        link.appendChild(linkText); link.appendChild(n);
-        navGroup.appendChild(label); navGroup.appendChild(link);
+        navGroupLabel.appendChild(labelText);
+        navGroupLabel.appendChild(n);
+        navGroupLabel.appendChild(chevronIcon());
+        navGroup.appendChild(navGroupLabel);
+
+        var links = el("div", "nav-chart-links");
+        chartsInSection.forEach(function (chart, ci) {
+          var link = document.createElement("a");
+          link.className = "nav-link" + (si === 0 && ci === 0 ? " active" : "");
+          link.href = "#" + chart.id;
+          link.textContent = chart.title;
+          links.appendChild(link);
+        });
+        navGroup.appendChild(links);
+
         navGroupHost.appendChild(navGroup);
       }
     });
