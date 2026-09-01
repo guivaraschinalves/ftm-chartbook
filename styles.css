@@ -174,12 +174,20 @@ h1 { font-family: var(--font-serif); font-weight: 500; font-size: 2.15rem; margi
 
 /* ---------- Sections & cards ---------- */
 .theme-section { margin-top: 46px; }
+.theme-section[open] > .section-heading { margin-bottom: 18px; }
 .section-heading {
-  display: flex; align-items: baseline; gap: 10px; margin-bottom: 18px; padding-bottom: 9px;
-  border-bottom: 1px solid var(--border);
+  display: flex; align-items: baseline; gap: 10px; margin-bottom: 0; padding-bottom: 9px;
+  border-bottom: 1px solid var(--border); cursor: pointer; list-style: none;
 }
+.section-heading::-webkit-details-marker { display: none; }
 .section-heading h2 { font-family: var(--font-serif); font-weight: 500; font-size: 1.32rem; margin: 0; }
-.section-heading .count { font-family: var(--font-mono); font-size: 0.74rem; color: var(--ink-muted); }
+.section-heading .count { font-family: var(--font-mono); font-size: 0.74rem; color: var(--ink-muted); margin-right: auto; }
+.section-heading .chevron { color: var(--ink-muted); flex: none; transition: transform 0.15s ease; }
+.theme-section[open] > .section-heading .chevron { transform: rotate(90deg); }
+.section-heading:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  .section-heading .chevron { transition: none; }
+}
 
 .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr)); gap: 22px; align-items: start; }
 

@@ -395,14 +395,17 @@
         }
       }
 
-      var section = el("section", "theme-section");
+      // The tema (subtópico) is a <details> too, same as its assunto one
+      // level up — closed by default, its own chart grid is what gets
+      // disclosed. Synced below with the sidebar's mirror of this same tema.
+      var section = el("details", "theme-section");
       section.id = sec.id;
-      var heading = el("div", "section-heading");
+      var heading = el("summary", "section-heading");
       var h2 = document.createElement("h2");
       h2.textContent = sec.label;
       var count = el("span", "count");
       count.textContent = chartsInSection.length + (chartsInSection.length === 1 ? " gráfico" : " gráficos");
-      heading.appendChild(h2); heading.appendChild(count);
+      heading.appendChild(h2); heading.appendChild(count); heading.appendChild(chevronIcon());
       section.appendChild(heading);
 
       var grid = el("div", "chart-grid");
@@ -438,6 +441,16 @@
         navGroup.appendChild(links);
 
         navGroupHost.appendChild(navGroup);
+
+        // Same one-state-two-mirrors trick as the assunto level: opening
+        // either the sidebar's tema disclosure or the main content one
+        // opens both.
+        section.addEventListener("toggle", function () {
+          if (navGroup.open !== section.open) navGroup.open = section.open;
+        });
+        navGroup.addEventListener("toggle", function () {
+          if (section.open !== navGroup.open) section.open = navGroup.open;
+        });
       }
     });
   }
