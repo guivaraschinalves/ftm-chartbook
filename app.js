@@ -35,6 +35,77 @@
 
   /* ============================== lightbox (zoom / fullscreen) ============================== */
   var lightbox = null;
+
+  // Freehand annotation layer over the lightbox image. Strokes are kept as
+  // vector point lists (in the image's natural-pixel coordinate space) and
+  // fully replayed on every redraw — that's what lets the canvas match the
+  // image's real resolution (crisp at any zoom) while still scaling
+  // responsively with pure CSS, with no resize-recalculation needed: pointer
+  // coordinates are mapped through the canvas's current on-screen rect at
+  // the moment of each event.
+  function setupAnnotation(canvas, img) {
+    var ctx = canvas.getContext("2d");
+    var strokes = [];
+    var current = null;
+
+    function brandColor() {
+      var v = getComputedStyle(document.documentElement).getPropertyValue("--brand");
+      return v && v.trim() ? v.trim() : "#2a78d6"; // azul FtM, mesmo do logo
+    }
+
+    function redraw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = brandColor();
+      ctx.lineWidth = Math.max(3, canvas.width / 350);
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      strokes.forEach(function (stroke) {
+        if (stroke.length < 2) return;
+        ctx.beginPath();
+        ctx.moveTo(stroke[0].x, stroke[0].y);
+        for (var i = 1; i < stroke.length; i++) ctx.lineTo(stroke[i].x, stroke[i].y);
+        ctx.stroke();
+      });
+    }
+
+    function resize() {
+      canvas.width = img.naturalWidth || 1200;
+      canvas.height = img.naturalHeight || 800;
+      redraw();
+    }
+
+    function pointFromEvent(evt) {
+      var rect = canvas.getBoundingClientRect();
+      return {
+        x: (evt.clientX - rect.left) * (canvas.width / rect.width),
+        y: (evt.clientY - rect.top) * (canvas.height / rect.height)
+      };
+    }
+
+    canvas.addEventListener("pointerdown", function (evt) {
+      evt.preventDefault();
+      canvas.setPointerCapture(evt.pointerId);
+      current = [pointFromEvent(evt)];
+      strokes.push(current);
+    });
+    canvas.addEventListener("pointermove", function (evt) {
+      if (!current) return;
+      current.push(pointFromEvent(evt));
+      redraw();
+    });
+    ["pointerup", "pointercancel", "pointerleave"].forEach(function (type) {
+      canvas.addEventListener(type, function () { current = null; });
+    });
+
+    img.addEventListener("load", resize);
+
+    return {
+      reset: function () { strokes = []; current = null; redraw(); },
+      undo: function () { strokes.pop(); redraw(); },
+      hasStrokes: function () { return strokes.length > 0; }
+    };
+  }
+
   function buildLightbox() {
     var box = el("div", "lightbox");
     box.id = "lightbox";
@@ -49,10 +120,35 @@
     closeBtn.textContent = "✕";
     closeBtn.addEventListener("click", closeLightbox);
 
+    var stage = el("div", "lightbox-stage");
+
     var img = document.createElement("img");
     img.className = "lightbox-img";
     img.id = "lightbox-img";
     img.alt = "";
+
+    var canvas = el("canvas", "lightbox-canvas");
+    canvas.setAttribute("aria-hidden", "true");
+
+    stage.appendChild(img);
+    stage.appendChild(canvas);
+
+    var annotate = setupAnnotation(canvas, img);
+
+    var toolbar = el("div", "lightbox-toolbar");
+    var undoBtn = el("button", "lightbox-tool-btn");
+    undoBtn.type = "button";
+    undoBtn.textContent = "Desfazer";
+    undoBtn.addEventListener("click", function () { annotate.undo(); });
+    var clearBtn = el("button", "lightbox-tool-btn");
+    clearBtn.type = "button";
+    clearBtn.textContent = "Limpar anotações";
+    clearBtn.addEventListener("click", function () { annotate.reset(); });
+    var hint = el("span", "lightbox-hint");
+    hint.textContent = "Arraste sobre o gráfico para anotar";
+    toolbar.appendChild(undoBtn);
+    toolbar.appendChild(clearBtn);
+    toolbar.appendChild(hint);
 
     var download = document.createElement("a");
     download.className = "lightbox-download";
@@ -60,7 +156,8 @@
     download.textContent = "Baixar imagem";
 
     box.appendChild(closeBtn);
-    box.appendChild(img);
+    box.appendChild(toolbar);
+    box.appendChild(stage);
     box.appendChild(download);
     box.addEventListener("click", function (evt) {
       if (evt.target === box) closeLightbox();
@@ -71,11 +168,12 @@
       if (evt.key === "Escape" && !box.hidden) closeLightbox();
     });
 
-    lightbox = { box: box, img: img, download: download, trigger: null };
+    lightbox = { box: box, img: img, download: download, annotate: annotate, trigger: null };
   }
 
   function openLightbox(chart, triggerEl) {
     if (!lightbox) return;
+    lightbox.annotate.reset();
     lightbox.img.src = chart.image;
     lightbox.img.alt = chart.title;
     lightbox.download.href = chart.image;
@@ -90,6 +188,7 @@
     if (!lightbox || lightbox.box.hidden) return;
     lightbox.box.hidden = true;
     lightbox.img.src = "";
+    lightbox.annotate.reset();
     document.body.classList.remove("lightbox-open");
     if (lightbox.trigger) lightbox.trigger.focus();
   }
