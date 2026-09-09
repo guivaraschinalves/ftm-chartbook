@@ -110,6 +110,19 @@
     },
     {
       "data": "2026-09-11",
+      "hora": "09:00",
+      "pais": "BR",
+      "indicador": "Pesquisa Mensal de Comércio (varejo)",
+      "referencia": "Julho/2026",
+      "importancia": "media",
+      "anterior": "0,50%",
+      "projecao": "",
+      "efetivo": "",
+      "fonte": "IBGE",
+      "obs": ""
+    },
+    {
+      "data": "2026-09-11",
       "hora": "09:30",
       "pais": "US",
       "indicador": "Índice de Preços ao Consumidor (CPI) (YoY)",
@@ -370,6 +383,19 @@
     },
     {
       "data": "2026-09-22",
+      "hora": "08:00",
+      "pais": "BR",
+      "indicador": "Ata do Copom",
+      "referencia": "Reunião de 15-16/set",
+      "importancia": "alta",
+      "anterior": "",
+      "projecao": "",
+      "efetivo": "",
+      "fonte": "BCB",
+      "obs": ""
+    },
+    {
+      "data": "2026-09-22",
       "hora": "",
       "pais": "AR",
       "indicador": "Índice de salários",
@@ -458,6 +484,19 @@
       "efetivo": "",
       "fonte": "Bank of Japan",
       "obs": "28/09 08:50 em Tóquio"
+    },
+    {
+      "data": "2026-09-29",
+      "hora": "09:00",
+      "pais": "BR",
+      "indicador": "Produção industrial (PIM-PF)",
+      "referencia": "Agosto/2026",
+      "importancia": "alta",
+      "anterior": "0,20%",
+      "projecao": "",
+      "efetivo": "",
+      "fonte": "IBGE",
+      "obs": ""
     },
     {
       "data": "2026-09-29",
