@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Follow the Money — Chart Book</title>
+<title>Calendário Econômico — Follow the Money</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='1015 135 400 415'%3E%3Cpath fill='%232a78d6' d='M1210.27,141.85c-85.33,0-158.08,54.13-186.48,130.22h144.44c7.34,0,13.29-5.95,13.29-13.29v-69.58 c0-2.39,1.38-4.53,3.55-5.52c2.15-0.99,4.69-0.62,6.49,0.93l172.26,149.62c2.53,2.2,3.96,5.38,3.96,8.72s-1.44,6.53-3.96,8.72 L1191.56,501.3c-1.8,1.56-4.34,1.92-6.49,0.93c-2.16-0.99-3.55-3.13-3.55-5.5v-69.58c0-7.34-5.95-13.29-13.29-13.29H1023.8 c28.4,76.08,101.16,130.22,186.48,130.22c110.04,0,199.23-90.04,199.23-201.12S1320.31,141.85,1210.27,141.85z'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -15,43 +15,40 @@
         <path d="M1210.27,141.85c-85.33,0-158.08,54.13-186.48,130.22h144.44c7.34,0,13.29-5.95,13.29-13.29v-69.58 c0-2.39,1.38-4.53,3.55-5.52c2.15-0.99,4.69-0.62,6.49,0.93l172.26,149.62c2.53,2.2,3.96,5.38,3.96,8.72s-1.44,6.53-3.96,8.72 L1191.56,501.3c-1.8,1.56-4.34,1.92-6.49,0.93c-2.16-0.99-3.55-3.13-3.55-5.5v-69.58c0-7.34-5.95-13.29-13.29-13.29H1023.8 c28.4,76.08,101.16,130.22,186.48,130.22c110.04,0,199.23-90.04,199.23-201.12S1320.31,141.85,1210.27,141.85z"></path>
       </svg>
       <div>
-        <div class="brand-name" id="brand-name">Follow the Money</div>
-        <div class="brand-tag" id="brand-tag">Chart Book</div>
+        <div class="brand-name">Follow the Money</div>
+        <div class="brand-tag">Calendário</div>
       </div>
     </div>
 
     <div class="nav-utility">
-      <a class="nav-utility-link" href="calendario.html">
+      <a class="nav-utility-link" href="index.html">
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
-          <rect x="2" y="3" width="12" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"></rect>
-          <path d="M2 6.5h12M5.5 2v2.4M10.5 2v2.4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path>
+          <path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
-        <span>Calendário econômico</span>
+        <span>Voltar ao chart book</span>
       </a>
     </div>
 
-    <nav class="nav" id="nav-sections"></nav>
+    <div class="cal-filters">
+      <div class="cal-filters-label">Países</div>
+      <div id="cal-country-filters"></div>
+    </div>
 
     <div class="sync-status">
-      <div class="sync-row"><span class="dot" aria-hidden="true"></span> Gráficos atualizados manualmente</div>
-      <div class="sync-note">Fonte: extração manual de dados primários realizada pela equipe do FtM</div>
+      <div class="sync-row"><span class="dot" aria-hidden="true"></span> <span id="cal-updated">Calendário atualizado manualmente</span></div>
+      <div class="sync-note" id="cal-sources"></div>
     </div>
   </aside>
 
   <main class="main">
-    <p class="eyebrow">Chart book</p>
-    <h1 id="page-title">Gráficos Follow the Money / Fernando Ulrich</h1>
-    <p class="lede" id="page-lede">Monitoramento de indicadores macroeconômicos e de mercados: balanço de pagamentos, inflação, política monetária, atividade econômica e dados globais.</p>
-    <div class="meta-row">
-      <span data-updated-label>Atualizado —</span>
-      <span data-source-label>Fonte: FtM</span>
-    </div>
+    <p class="eyebrow">Calendário econômico</p>
+    <h1>Agenda de indicadores</h1>
+    <p class="lede">Divulgações de Brasil, Estados Unidos, Argentina, China e Japão. Projeção é o consenso de mercado publicado antes da divulgação — só existe quando a data se aproxima.</p>
 
-    <div id="chart-sections"></div>
+    <div id="cal-root"></div>
   </main>
 </div>
 
-<script src="config.js"></script>
-<script src="app.js"></script>
+<script src="calendar.js"></script>
 </body>
 </html>

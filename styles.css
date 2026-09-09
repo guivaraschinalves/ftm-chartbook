@@ -248,7 +248,7 @@ h1 { font-family: var(--font-serif); font-weight: 500; font-size: 2.15rem; margi
 }
 
 /* ---------- Lightbox ---------- */
-body.lightbox-open { overflow: hidden; }
+body.lightbox-open, body.cal-modal-open { overflow: hidden; }
 .lightbox {
   position: fixed; inset: 0; z-index: 100; background: rgba(6, 6, 5, 0.88);
   display: flex; align-items: center; justify-content: center; padding: 56px 24px;
@@ -302,3 +302,174 @@ body.lightbox-open { overflow: hidden; }
 }
 .lightbox-download:hover { background: rgba(255, 255, 255, 0.2); }
 .lightbox-download:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* ---------- Calendário econômico ---------- */
+/* Link para fora da navegação gerada. Fica FORA de #nav-sections de propósito:
+   buildGallery() faz nav.innerHTML = "" a cada carga e apagaria qualquer coisa
+   que estivesse lá dentro. */
+.nav-utility { padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.nav-utility-link {
+  display: flex; align-items: center; gap: 8px; text-decoration: none;
+  font-family: var(--font-serif); font-size: 0.82rem; color: var(--ink);
+  padding: 6px 8px; border-radius: 6px;
+}
+.nav-utility-link:hover { background: var(--accent-wash); }
+.nav-utility-link:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.nav-utility-link svg { color: var(--ink-muted); flex: none; }
+
+.cal-filters-label {
+  font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--ink-muted); margin: 0 0 8px 2px;
+}
+.cal-filtro {
+  display: flex; align-items: center; gap: 8px; width: 100%; cursor: pointer;
+  background: none; border: 1px solid transparent; border-radius: 6px;
+  padding: 5px 8px; color: var(--ink-secondary); font-size: 0.8rem; text-align: left;
+  font-family: var(--font-sans);
+}
+.cal-filtro:hover { background: var(--accent-wash); color: var(--ink); }
+.cal-filtro.is-on { background: var(--accent-wash); color: var(--ink); border-color: var(--border); font-weight: 600; }
+.cal-filtro:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+
+/* Bandeiras: hex fixo, nunca variável de tema — bandeira nacional não muda de
+   cor com o modo escuro. O fio de contorno existe porque EUA, Argentina e Japão
+   têm áreas brancas que sumiriam contra --surface no tema claro. */
+.cal-flag {
+  width: 18px; height: 12px; border-radius: 2px; flex: none; display: block;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.cal-toolbar {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding-bottom: 14px; margin-bottom: 18px; border-bottom: 1px solid var(--border);
+}
+.cal-nav { display: flex; align-items: center; gap: 10px; }
+.cal-nav-btn {
+  width: 30px; height: 30px; border-radius: 7px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface); color: var(--ink);
+  font-size: 1rem; line-height: 1;
+}
+.cal-nav-btn:hover:not(:disabled) { border-color: var(--ink-muted); }
+.cal-nav-btn:disabled { opacity: 0.35; cursor: default; }
+.cal-nav-btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.cal-periodo { font-family: var(--font-serif); font-size: 1.05rem; min-width: 15ch; }
+.cal-fuso { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-muted); margin-left: auto; }
+
+.cal-week { display: flex; flex-direction: column; }
+.cal-week-head {
+  display: grid; grid-template-columns: 132px 1fr repeat(3, 92px); gap: 10px;
+  padding: 0 12px 6px; font-family: var(--font-mono); font-size: 0.62rem;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-muted);
+}
+.cal-week-head .cal-head-col { text-align: right; }
+.cal-week-head span:first-child { grid-column: 1 / 3; }
+
+.cal-band {
+  display: grid; grid-template-columns: 132px 1fr; gap: 10px;
+  padding: 10px 12px; border-top: 1px solid var(--border);
+}
+.cal-band--fds { background: var(--page-bg); }
+.cal-band--hoje { background: var(--accent-wash); }
+.cal-rail { display: flex; align-items: baseline; gap: 7px; }
+.cal-rail-dow {
+  font-family: var(--font-mono); font-size: 0.66rem; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--ink-muted);
+}
+.cal-rail-num { font-family: var(--font-serif); font-size: 1.25rem; color: var(--ink); }
+.cal-rail-mes { font-family: var(--font-mono); font-size: 0.66rem; color: var(--ink-muted); }
+.cal-band-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cal-band-vazio { font-size: 0.78rem; color: var(--ink-muted); padding: 4px 2px; }
+
+.cal-event {
+  display: grid; grid-template-columns: 52px 18px 1fr repeat(3, 92px); gap: 10px;
+  align-items: center; width: 100%; text-align: left; cursor: pointer;
+  background: none; border: none; border-radius: 7px; padding: 7px 8px;
+  font-family: var(--font-sans); color: var(--ink-secondary);
+}
+.cal-event:hover { background: var(--surface); color: var(--ink); }
+.cal-event:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+.cal-event--passado { opacity: 0.72; }
+/* Relevância em dois canais — filete + contraste do texto — para sobreviver a
+   escala de cinza e a daltonismo. Sem o vermelho/âmbar da Investing, que
+   brigaria com a paleta sóbria do site. */
+.cal-event.imp-alta { box-shadow: inset 2px 0 0 var(--brand); color: var(--ink); }
+.cal-event.imp-media { box-shadow: inset 2px 0 0 var(--ink-muted); }
+.cal-event.imp-baixa { color: var(--ink-muted); }
+.cal-ev-hora { font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-muted); }
+.cal-ev-nome { display: flex; flex-direction: column; min-width: 0; }
+.cal-ev-titulo { font-size: 0.86rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cal-ev-ref { font-size: 0.7rem; color: var(--ink-muted); }
+.cal-ev-val { font-family: var(--font-mono); font-size: 0.78rem; text-align: right; }
+.cal-ev-val.is-efetivo { color: var(--ink); font-weight: 600; }
+.cal-ev-micro { display: none; }
+.cal-vazio { color: var(--ink-muted); }
+.cal-aguardando { color: var(--ink-muted); font-style: italic; font-size: 0.72rem; }
+
+.cal-warning {
+  font-size: 0.76rem; color: var(--ink-secondary); background: var(--surface);
+  border-left: 2px solid var(--danger); border-radius: 4px;
+  padding: 8px 10px; margin-bottom: 14px;
+}
+
+/* Modal: card claro sobre véu, não o lightbox escuro de imagem — aqui o
+   conteúdo é texto e número, que pede fundo de leitura. */
+.cal-modal {
+  position: fixed; inset: 0; z-index: 100; background: rgba(6, 6, 5, 0.5);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.cal-modal[hidden] { display: none; }
+.cal-modal-card {
+  position: relative; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; box-shadow: var(--shadow); padding: 24px 26px;
+  max-width: 560px; width: 100%; max-height: calc(100vh - 48px); overflow-y: auto;
+}
+.cal-modal-close {
+  position: absolute; top: 12px; right: 14px; width: 30px; height: 30px;
+  border-radius: 50%; border: 1px solid var(--border); background: none;
+  color: var(--ink-secondary); cursor: pointer; line-height: 1;
+}
+.cal-modal-close:hover { color: var(--ink); border-color: var(--ink-muted); }
+.cal-modal-close:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.cal-modal-data { font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-muted); }
+.cal-modal-pais {
+  display: flex; align-items: center; gap: 8px; margin-top: 10px;
+  font-size: 0.78rem; color: var(--ink-secondary);
+}
+.cal-modal-titulo {
+  font-family: var(--font-serif); font-weight: 500; font-size: 1.3rem;
+  margin: 8px 0 0; text-wrap: balance;
+}
+.cal-modal-ref { font-size: 0.8rem; color: var(--ink-secondary); margin-top: 4px; }
+.cal-modal-valores {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  margin-top: 18px; padding: 14px 0; border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.cal-modal-valor { display: flex; flex-direction: column; gap: 3px; }
+.cal-modal-valor-rotulo {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.07em;
+  text-transform: uppercase; color: var(--ink-muted);
+}
+.cal-modal-valor-num { font-family: var(--font-mono); font-size: 0.95rem; color: var(--ink); }
+.cal-surpresa {
+  margin-top: 12px; font-size: 0.78rem; color: var(--ink-secondary);
+  font-style: italic;
+}
+.cal-modal-rodape {
+  margin-top: 14px; font-family: var(--font-mono); font-size: 0.68rem;
+  color: var(--ink-muted); line-height: 1.6;
+}
+
+@media (max-width: 760px) {
+  .cal-week-head { display: none; }
+  .cal-band { grid-template-columns: 1fr; gap: 6px; }
+  .cal-rail { gap: 6px; }
+  .cal-event { grid-template-columns: 46px 18px 1fr; row-gap: 8px; }
+  .cal-ev-val { grid-column: span 1; text-align: left; }
+  .cal-ev-val:nth-of-type(1) { grid-column: 1 / 2; }
+  .cal-ev-micro {
+    display: block; font-size: 0.58rem; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--ink-muted);
+  }
+  .cal-fuso { margin-left: 0; }
+}

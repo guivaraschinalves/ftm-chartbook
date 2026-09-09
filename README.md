@@ -37,8 +37,23 @@ styles.css    → visual (cores, tipografia, layout)
 app.js        → descobre os gráficos (API do GitHub) e monta a galeria
 config.js     → ← É AQUI que você mexe: marca do site e qual repositório ler
 charts/       → ← os PNGs entram aqui, organizados por pasta (veja charts/README.md)
+calendario.html → página do calendário econômico
+calendar.js   → monta o calendário (lê os JSON locais, sem API do GitHub)
+calendar/     → ← os eventos entram aqui, um JSON por mês (veja calendar/README.md)
 README.md     → este arquivo
 ```
+
+## Calendário econômico
+
+Além da galeria de gráficos, o site publica um **calendário econômico** em
+`calendario.html` (link no topo da barra lateral). Ele mostra uma semana por
+vez — da semana corrente até 4 semanas à frente — com as divulgações de Brasil,
+Estados Unidos, Argentina, China e Japão.
+
+Diferente da galeria, o calendário **não usa a API do GitHub**: ele lê arquivos
+JSON locais (`calendar/AAAA-MM.json`), então carrega na hora e não consome o
+limite de requisições. Os dados são mantidos manualmente — veja
+`calendar/README.md` para o formato e para as fontes.
 
 ## Como exportar os gráficos do PowerPoint
 
