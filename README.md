@@ -34,9 +34,11 @@ para o formato exato.
 ```
 index.html    → casca da página (sidebar, cabeçalho) — não precisa editar
 styles.css    → visual (cores, tipografia, layout)
-app.js        → descobre os gráficos (API do GitHub) e monta a galeria
+app.js        → descobre os gráficos (lê o manifest.json) e monta a galeria
 config.js     → ← É AQUI que você mexe: marca do site e qual repositório ler
 charts/       → ← os PNGs entram aqui, organizados por pasta (veja charts/README.md)
+manifest.json → lista dos gráficos, gerada automaticamente — não edite à mão
+scripts/      → o gerador do manifest.json (roda na Action, não no seu PC)
 calendario.html → página do calendário econômico
 calendar.js   → monta o calendário (lê os JSON locais, sem API do GitHub)
 calendar/     → ← os eventos entram aqui, um JSON por mês (veja calendar/README.md)
@@ -135,13 +137,27 @@ sozinho alguns minutos depois do push. Sem terminal? Dá pra fazer tudo
 (criar pasta, subir arquivo, renomear, apagar) direto pela interface do
 GitHub, sem nunca abrir um terminal.
 
-## Limite da API do GitHub
+## Como o site sabe quais gráficos existem (`manifest.json`)
 
-O site busca a lista de gráficos na API pública do GitHub, que permite 60
-requisições por hora por IP sem login. Cada visita consome 1 requisição
-(o resultado fica em cache no navegador por 5 minutos, então recarregar a
-mesma aba não conta de novo). Para o uso atual isso é folgado; se um dia o
-site tiver tráfego alto o bastante para esbarrar nesse limite, a solução é
-gerar um `manifest.json` automaticamente a cada `git push` (via GitHub
-Actions) e o site passar a ler esse arquivo em vez de chamar a API
-diretamente — aviso quando/se isso virar necessário.
+O site lê a lista de gráficos de um arquivo estático, o `manifest.json`,
+servido pelo próprio GitHub Pages. Ele é **gerado automaticamente**: a Action
+em `.github/workflows/manifest.yml` roda `scripts/gerar_manifest.py` a cada
+push que mexe em `charts/` e comita o arquivo atualizado. Você nunca precisa
+editá-lo à mão — continua valendo que organizar gráfico é só mexer em pasta.
+
+Antes, essa lista vinha da API pública do GitHub a cada visita. O problema é
+que essa API permite **60 requisições por hora por IP** sem login, e esse
+teto é compartilhado por tudo que sai pelo mesmo IP — num escritório atrás
+de um NAT, a extensão de IDE de um colega, um `npm install` ou o navegador
+de outra pessoa consomem o mesmo saldo. Quando estoura, a API responde 403 e
+a galeria não desenha nada: o site parece "não abrir", sem que ninguém tenha
+sequer visitado ele. Lendo um arquivo da mesma origem, esse limite deixa de
+existir (e a lista ficou ~6x menor de baixar).
+
+A chamada à API foi **mantida como fallback**: se o `manifest.json` não
+existir ou vier inválido, o `app.js` avisa no console e volta a consultar a
+API, como antes. Um checkout onde a Action nunca rodou continua funcionando.
+
+**Se um gráfico novo não aparecer no site**, confira na aba Actions se a
+execução do "Atualiza o manifest.json" passou — é ela que registra o arquivo
+novo na lista.

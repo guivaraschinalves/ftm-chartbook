@@ -217,6 +217,21 @@
     return { order: 999, label: name };
   }
 
+  // manifest.json is regenerated on every push that touches charts/ (see
+  // .github/workflows/manifest.yml) and served from this same Pages site, so
+  // reading it costs nothing against the GitHub API's 60-requests-per-hour
+  // per-IP limit. It deliberately mirrors the shape of the API response
+  // ({path, type} entries), so buildSectionsAndCharts() cannot tell which of
+  // the two produced the list.
+  async function fetchManifestTree() {
+    var res = await fetch("manifest.json", { cache: "no-cache" });
+    if (!res.ok) throw new Error("manifest.json respondeu " + res.status);
+    var data = await res.json();
+    if (!data || !Array.isArray(data.tree)) throw new Error("manifest.json não tem a lista 'tree'");
+    if (!data.tree.length) throw new Error("manifest.json está vazio");
+    return data.tree;
+  }
+
   async function fetchRepoTree() {
     var rc = window.REPO_CONFIG || {};
     var cacheKey = "chartbook-tree:" + rc.owner + "/" + rc.repo + "/" + rc.branch;
@@ -227,6 +242,17 @@
         if (Date.now() - parsed.t < 5 * 60 * 1000) return parsed.tree;
       }
     } catch (e) { /* sessionStorage unavailable (private mode etc.) — just skip the cache */ }
+
+    // Manifest first, API second. A missing manifest is an expected, fully
+    // recoverable state (a checkout where the workflow never ran, a branch
+    // that predates it), so this warns and falls through instead of failing.
+    try {
+      var manifestTree = await fetchManifestTree();
+      try { sessionStorage.setItem(cacheKey, JSON.stringify({ t: Date.now(), tree: manifestTree })); } catch (e2) {}
+      return manifestTree;
+    } catch (e) {
+      console.warn("manifest.json indisponível — usando a API do GitHub:", e.message);
+    }
 
     var url = "https://api.github.com/repos/" + rc.owner + "/" + rc.repo + "/git/trees/" + rc.branch + "?recursive=1";
     var res = await fetch(url, { headers: { Accept: "application/vnd.github+json" } });

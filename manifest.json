@@ -1,0 +1,210 @@
+{
+ "generated": "2026-09-10T18:24:55+00:00",
+ "count": 51,
+ "tree": [
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/01 Visão geral/01 - Balanço de Pagamentos do Brasil - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/01 Visão geral/02 - Balanço de Pagamentos do Brasil - Acumulado em 3 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/01 Visão geral/03 - Balanço de Pagamentos do Brasil e Taxa de Câmbio - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/01 Visão geral/04 - Saldo do Balanço de Pagamentos do Brasil - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/01 Visão geral/05 - Saldo do Balanço de Pagamentos - Acum. 12 meses, pct do PIB (dir)/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/01 Visão geral/06 - Saldo do Balanço de Pagamentos - Acum. 3 meses, pct do PIB (dir)/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/02 Conta corrente/01 - Conta Corrente do Brasil - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/02 Conta corrente/02 - Conta Corrente do Brasil - Acumulado em 3 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/03 Conta financeira/01 - Conta Financeira do Brasil - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/03 Conta financeira/02 - Conta Financeira do Brasil - Acumulado em 3 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/03 Conta financeira/03 - Investimento Estrangeiro Direto - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/03 Conta financeira/04 - Investimento em Carteira - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/03 Conta financeira/05 - Investimento em Carteira no Mercado Doméstico - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/03 Conta financeira/06 - Investimento em Carteira no Mercado Doméstico - Acumulado em 3 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/03 Conta financeira/07 - Investimento em Ações e Fundos no Mercado Doméstico/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/04 Conta capital/01 - Conta Capital do Brasil - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/04 Conta capital/02 - Conta Capital do Brasil - Acumulado em 3 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/05 Indicadores complementares/01 - Necessidade de Capital de Curto Prazo/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/05 Indicadores complementares/02 - Fluxo Externo Líquido Mensal de Criptos/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/Balanço de Pagamentos - Brasil/05 Indicadores complementares/03 - Fluxo Externo Líquido Acumulado de Criptos - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/01 PIB Nominal/01 - Variação do PIB Nominal pela Demanda - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/01 PIB Nominal/02 - Variação do PIB Nominal e CDI - Detalhado/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/01 PIB Nominal/03 - Variação do PIB Nominal e CDI/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/01 PIB Nominal/04 - Variação do PIB Nominal pela Oferta - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/02 Participação dos Componentes do PIB/01 - Participação dos Componentes do PIB - Visão Completa/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/02 Participação dos Componentes do PIB/02 - Participação dos Componentes do PIB - Consumo, Governo e FBCF/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/02 Participação dos Componentes do PIB/03 - Participação dos Componentes do PIB - Governo, FBCF e Exportação/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/02 Participação dos Componentes do PIB/04 - Participação dos Componentes do PIB - FBCF Total e Fixo/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/03 Ótica da Demanda (Trimestral)/01 - Variação Real do PIB pela Demanda - Visão Completa/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/03 Ótica da Demanda (Trimestral)/02 - Variação Real do PIB pela Demanda - Componentes Principais/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/03 Ótica da Demanda (Trimestral)/03 - Variação Real do PIB e FBCF/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/03 Ótica da Demanda (Trimestral)/04 - Variação Real do PIB e Consumo das Famílias/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/03 Ótica da Demanda (Trimestral)/05 - Variação Real do PIB e Consumo do Governo/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/04 Ótica da Demanda (Acumulado 12 meses)/01 - Variação Real do PIB - Série Longa (1996-2026)/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/04 Ótica da Demanda (Acumulado 12 meses)/02 - Variação Real do PIB e Consumo das Famílias/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/04 Ótica da Demanda (Acumulado 12 meses)/03 - Variação Real do PIB, Consumo das Famílias e Governo/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/04 Ótica da Demanda (Acumulado 12 meses)/04 - Variação Real do PIB e FBCF/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/04 Ótica da Demanda (Acumulado 12 meses)/05 - Variação Real do PIB e Consumo do Governo/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/04 Ótica da Demanda (Acumulado 12 meses)/06 - Variação Real do PIB, Exportação e Importação/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/05 Ótica da Oferta (Trimestral)/01 - Variação Real do PIB pela Oferta/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/05 Ótica da Oferta (Trimestral)/02 - Variação Real do PIB pela Oferta - Indústria/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/05 Ótica da Oferta (Trimestral)/03 - Variação Real do PIB pela Oferta - Serviços (Barras)/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/05 Ótica da Oferta (Trimestral)/04 - Variação Real do PIB pela Oferta - Serviços (Linhas)/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/05 Ótica da Oferta (Trimestral)/05 - Variação Real do PIB pela Oferta - Serviços Selecionados/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/06 Ótica da Oferta (Acumulado 12 meses)/01 - Variação Real do PIB pela Oferta/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/06 Ótica da Oferta (Acumulado 12 meses)/02 - Variação Real do PIB pela Oferta - Indústria/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/06 Ótica da Oferta (Acumulado 12 meses)/03 - Variação Real do PIB pela Oferta - Serviços/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/06 Ótica da Oferta (Acumulado 12 meses)/04 - Variação Real do PIB pela Oferta - Serviços Selecionados/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/06 Ótica da Oferta (Acumulado 12 meses)/05 - Variação Real do PIB pela Oferta e Contribuições/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/06 Ótica da Oferta (Acumulado 12 meses)/06 - Variação Real do PIB pela Oferta e Contribuições - Indústria/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/PIB - Brasil/06 Ótica da Oferta (Acumulado 12 meses)/07 - Variação Real do PIB pela Oferta e Contribuições - Serviços/grafico.png",
+   "type": "blob"
+  }
+ ]
+}
