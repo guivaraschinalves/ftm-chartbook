@@ -1,5 +1,5 @@
 {
- "count": 51,
+ "count": 63,
  "tree": [
   {
    "path": "charts/Balanço de Pagamentos - Brasil/01 Visão geral/01 - Balanço de Pagamentos do Brasil - Acumulado em 12 meses/grafico.png",
@@ -79,6 +79,54 @@
   },
   {
    "path": "charts/Balanço de Pagamentos - Brasil/05 Indicadores complementares/03 - Fluxo Externo Líquido Acumulado de Criptos - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/IPCA - Brasil/01 Visão geral/01 - Taxa Selic Meta, IPCA e Meta para a Inflação/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/IPCA - Brasil/01 Visão geral/02 - Contribuição para o IPCA por Grupo - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/IPCA - Brasil/01 Visão geral/03 - Contribuição para o IPCA por Grupo - Acumulado em 3 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/IPCA - Brasil/02 Aberturas/01 - IPCA Serviços - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/IPCA - Brasil/02 Aberturas/02 - IPCA Serviços, Industriais e Alimentação no Domicílio - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/IPCA - Brasil/02 Aberturas/03 - IPCA Comercializáveis e Não Comercializáveis - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/IPCA - Brasil/02 Aberturas/04 - IPCA Não Duráveis, Semiduráveis e Duráveis - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/IPCA - Brasil/02 Aberturas/05 - IPCA Administrados e Livres - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/IPCA - Brasil/03 Núcleos/01 - IPCA Cheio e IPCA EX1 - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/IPCA - Brasil/03 Núcleos/02 - IPCA Cheio e IPCA ex Alimentação e Energia - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/IPCA - Brasil/03 Núcleos/03 - IPCA Cheio e IPCA EX3 Serviços - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/IPCA - Brasil/03 Núcleos/04 - IPCA Cheio e Média dos Núcleos - Acumulado em 12 meses/grafico.png",
    "type": "blob"
   },
   {
