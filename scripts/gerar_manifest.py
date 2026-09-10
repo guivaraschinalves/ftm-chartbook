@@ -16,7 +16,6 @@ não precisa mudar e a chamada à API continua funcionando como fallback,
 caso o manifest não exista.
 """
 
-import datetime
 import json
 import os
 
@@ -42,11 +41,15 @@ def main():
         raise SystemExit(f"pasta '{RAIZ}/' não encontrada — rode na raiz do repositório")
 
     entradas = coletar(RAIZ)
-    agora = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
 
+    # Saida deterministica de proposito: nada de timestamp aqui. Se o
+    # conteudo carregasse a hora da geracao, o arquivo mudaria a cada
+    # execucao e a Action comitaria mesmo quando a lista de graficos nao
+    # mudou — um commit e um build do Pages a mais, para nada. Quando o
+    # manifest foi gerado, a data do commit ja diz.
     with open(SAIDA, "w", encoding="utf-8") as f:
         json.dump(
-            {"generated": agora, "count": len(entradas), "tree": entradas},
+            {"count": len(entradas), "tree": entradas},
             f,
             ensure_ascii=False,
             indent=1,
