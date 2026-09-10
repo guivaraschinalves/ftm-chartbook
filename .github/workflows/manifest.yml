@@ -1,0 +1,38 @@
+name: Atualiza o manifest.json
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "charts/**"
+      - "scripts/gerar_manifest.py"
+      - ".github/workflows/manifest.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: manifest-json
+  cancel-in-progress: true
+
+jobs:
+  manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Gera o manifest.json
+        run: python3 scripts/gerar_manifest.py
+
+      - name: Commita, se mudou algo
+        run: |
+          if git diff --quiet -- manifest.json; then
+            echo "manifest.json já estava atualizado — nada a fazer."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add manifest.json
+          git commit -m "Atualiza manifest.json"
+          git push
