@@ -39,6 +39,7 @@ config.js     → ← É AQUI que você mexe: marca do site e qual repositório 
 charts/       → ← os PNGs entram aqui, organizados por pasta (veja charts/README.md)
 manifest.json → lista dos gráficos, gerada automaticamente — não edite à mão
 scripts/      → o gerador do manifest.json (roda na Action, não no seu PC)
+powerpoint/   → a macro do PowerPoint que exporta e publica (veja powerpoint/README.md)
 calendario.html → página do calendário econômico
 calendar.js   → monta o calendário (lê os JSON locais, sem API do GitHub)
 calendar/     → ← os eventos entram aqui, um JSON por mês (veja calendar/README.md)
