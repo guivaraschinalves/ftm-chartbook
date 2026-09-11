@@ -303,6 +303,45 @@ body.lightbox-open, body.cal-modal-open { overflow: hidden; }
 .lightbox-download:hover { background: rgba(255, 255, 255, 0.2); }
 .lightbox-download:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
+/* Tela cheia: a imagem passa a valer a tela inteira (o padding de 56/24px e a
+   folga de 112px existem para afastar a imagem dos controles no modo janela;
+   em tela cheia o pedido é justamente ocupar tudo).
+
+   Consequência a tratar: sem esse respiro, os controles deixam de flutuar
+   sobre o véu escuro e passam a ficar em cima do gráfico. Como quase todo
+   gráfico do chart book tem fundo claro, o texto branco sobre
+   rgba(255,255,255,0.1) ficaria ilegível — daí o fundo escuro opaco abaixo.
+
+   `:fullscreen` e `:-webkit-full-screen` vão em blocos separados de propósito:
+   um seletor desconhecido dentro de uma lista invalida a lista inteira. */
+.lightbox:fullscreen { padding: 0; background: #060605; }
+.lightbox:-webkit-full-screen { padding: 0; background: #060605; }
+
+.lightbox:fullscreen .lightbox-img,
+.lightbox:fullscreen .lightbox-canvas { border-radius: 0; }
+.lightbox:-webkit-full-screen .lightbox-img,
+.lightbox:-webkit-full-screen .lightbox-canvas { border-radius: 0; }
+
+.lightbox:fullscreen .lightbox-img { max-width: 100vw; max-height: 100vh; box-shadow: none; }
+.lightbox:-webkit-full-screen .lightbox-img { max-width: 100vw; max-height: 100vh; box-shadow: none; }
+
+.lightbox:fullscreen .lightbox-tool-btn,
+.lightbox:fullscreen .lightbox-close,
+.lightbox:fullscreen .lightbox-download { background: rgba(6, 6, 5, 0.72); }
+.lightbox:-webkit-full-screen .lightbox-tool-btn,
+.lightbox:-webkit-full-screen .lightbox-close,
+.lightbox:-webkit-full-screen .lightbox-download { background: rgba(6, 6, 5, 0.72); }
+
+.lightbox:fullscreen .lightbox-tool-btn:hover,
+.lightbox:fullscreen .lightbox-close:hover,
+.lightbox:fullscreen .lightbox-download:hover { background: rgba(6, 6, 5, 0.9); }
+.lightbox:-webkit-full-screen .lightbox-tool-btn:hover,
+.lightbox:-webkit-full-screen .lightbox-close:hover,
+.lightbox:-webkit-full-screen .lightbox-download:hover { background: rgba(6, 6, 5, 0.9); }
+
+.lightbox:fullscreen .lightbox-hint { color: rgba(255, 255, 255, 0.85); text-shadow: 0 1px 3px #060605; }
+.lightbox:-webkit-full-screen .lightbox-hint { color: rgba(255, 255, 255, 0.85); text-shadow: 0 1px 3px #060605; }
+
 /* ---------- Calendário econômico ---------- */
 /* Link para fora da navegação gerada. Fica FORA de #nav-sections de propósito:
    buildGallery() faz nav.innerHTML = "" a cada carga e apagaria qualquer coisa

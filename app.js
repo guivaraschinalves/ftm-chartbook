@@ -36,6 +36,33 @@
   /* ============================== lightbox (zoom / fullscreen) ============================== */
   var lightbox = null;
 
+  /* Fullscreen API com o prefixo do Safari. `requestFullscreen` devolve
+     Promise nos navegadores atuais e `undefined` nos antigos, daí o teste
+     antes do .catch — uma recusa do navegador (foco fora do gesto do
+     usuário, política de permissão) não deve virar erro no console. */
+  function fullscreenEl() {
+    return document.fullscreenElement || document.webkitFullscreenElement || null;
+  }
+
+  function fullscreenSuportado(node) {
+    return !!(node.requestFullscreen || node.webkitRequestFullscreen);
+  }
+
+  function entrarFullscreen(node) {
+    var p = node.requestFullscreen ? node.requestFullscreen()
+          : node.webkitRequestFullscreen ? node.webkitRequestFullscreen()
+          : null;
+    if (p && p.catch) p.catch(function () {});
+  }
+
+  function sairFullscreen() {
+    if (!fullscreenEl()) return;
+    var p = document.exitFullscreen ? document.exitFullscreen()
+          : document.webkitExitFullscreen ? document.webkitExitFullscreen()
+          : null;
+    if (p && p.catch) p.catch(function () {});
+  }
+
   // Freehand annotation layer over the lightbox image. Strokes are kept as
   // vector point lists (in the image's natural-pixel coordinate space) and
   // fully replayed on every redraw — that's what lets the canvas match the
@@ -136,6 +163,31 @@
     var annotate = setupAnnotation(canvas, img);
 
     var toolbar = el("div", "lightbox-toolbar");
+
+    /* Tela cheia vai no `box` inteiro, não só na imagem: em tela cheia o
+       navegador só pinta o elemento promovido, então mandar a <img> sozinha
+       levaria embora a barra de ferramentas, o ✕ e o botão de baixar. */
+    var fsBtn = el("button", "lightbox-tool-btn");
+    fsBtn.type = "button";
+    fsBtn.textContent = "Tela cheia";
+    fsBtn.setAttribute("aria-pressed", "false");
+    fsBtn.hidden = !fullscreenSuportado(box);   // iOS antigo não tem a API em <div>
+    fsBtn.addEventListener("click", function () {
+      if (fullscreenEl()) sairFullscreen();
+      else entrarFullscreen(box);
+    });
+
+    // O usuário também sai da tela cheia por Escape ou F11, sem passar pelo
+    // botão — então quem manda no rótulo é o evento do navegador, não o clique.
+    function syncFsBtn() {
+      var ativo = !!fullscreenEl();
+      fsBtn.textContent = ativo ? "Sair da tela cheia" : "Tela cheia";
+      fsBtn.setAttribute("aria-pressed", ativo ? "true" : "false");
+    }
+    ["fullscreenchange", "webkitfullscreenchange"].forEach(function (tipo) {
+      document.addEventListener(tipo, syncFsBtn);
+    });
+
     var undoBtn = el("button", "lightbox-tool-btn");
     undoBtn.type = "button";
     undoBtn.textContent = "Desfazer";
@@ -146,6 +198,7 @@
     clearBtn.addEventListener("click", function () { annotate.reset(); });
     var hint = el("span", "lightbox-hint");
     hint.textContent = "Arraste sobre o gráfico para anotar";
+    toolbar.appendChild(fsBtn);
     toolbar.appendChild(undoBtn);
     toolbar.appendChild(clearBtn);
     toolbar.appendChild(hint);
@@ -165,10 +218,15 @@
     document.body.appendChild(box);
 
     document.addEventListener("keydown", function (evt) {
-      if (evt.key === "Escape" && !box.hidden) closeLightbox();
+      if (evt.key !== "Escape" || box.hidden) return;
+      // Em tela cheia, Escape significa "sair da tela cheia" — fechar o
+      // lightbox junto tiraria o gráfico da tela em um passo só.
+      if (fullscreenEl()) { sairFullscreen(); return; }
+      closeLightbox();
     });
 
-    lightbox = { box: box, img: img, download: download, annotate: annotate, trigger: null };
+    lightbox = { box: box, img: img, download: download, annotate: annotate,
+                 fsBtn: fsBtn, trigger: null };
   }
 
   function openLightbox(chart, triggerEl) {
@@ -186,6 +244,9 @@
 
   function closeLightbox() {
     if (!lightbox || lightbox.box.hidden) return;
+    // Sem isto, fechar pelo ✕ estando em tela cheia deixaria o navegador em
+    // tela cheia exibindo um elemento já escondido — tela preta.
+    sairFullscreen();
     lightbox.box.hidden = true;
     lightbox.img.src = "";
     lightbox.annotate.reset();
@@ -395,7 +456,7 @@
     var imgWrap = el("div", "chart-image-wrap");
     var zoomBtn = el("button", "chart-image-btn");
     zoomBtn.type = "button";
-    zoomBtn.setAttribute("aria-label", "Ver em tela cheia: " + chart.title);
+    zoomBtn.setAttribute("aria-label", "Ampliar: " + chart.title);
     var img = document.createElement("img");
     img.src = chart.image;
     img.alt = chart.title;
@@ -422,9 +483,12 @@
     card.appendChild(imgWrap);
 
     var actions = el("div", "chart-actions");
+    // "Ampliar", não "Tela cheia": este botão abre o lightbox, e é lá dentro
+    // que existe a tela cheia de verdade. Dois rótulos iguais para ações
+    // diferentes confundiriam.
     var zoomLink = el("button", "chart-action");
     zoomLink.type = "button";
-    zoomLink.textContent = "Tela cheia";
+    zoomLink.textContent = "Ampliar";
     zoomLink.addEventListener("click", function () {
       if (imageOk) openLightbox(chart, zoomLink);
     });
