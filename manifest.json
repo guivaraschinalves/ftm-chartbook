@@ -1,5 +1,5 @@
 {
- "count": 63,
+ "count": 71,
  "tree": [
   {
    "path": "charts/Balanço de Pagamentos - Brasil/01 Visão geral/01 - Balanço de Pagamentos do Brasil - Acumulado em 12 meses/grafico.png",
@@ -79,6 +79,38 @@
   },
   {
    "path": "charts/Balanço de Pagamentos - Brasil/05 Indicadores complementares/03 - Fluxo Externo Líquido Acumulado de Criptos - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/CPI - EUA/01 Visão geral/01 - CPI All Items - Variação em Diferentes Horizontes/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/CPI - EUA/01 Visão geral/02 - CPI Headline e Core - Variação Anual/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/CPI - EUA/01 Visão geral/03 - CPI Headline e Core - MoM Anualizado/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/CPI - EUA/02 Componentes/01 - CPI Componentes - Variação Anual/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/CPI - EUA/02 Componentes/02 - CPI Componentes Selecionados - MoM Anualizado/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/CPI - EUA/02 Componentes/03 - CPI Shelter - Variação em Diferentes Horizontes/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/CPI - EUA/03 Núcleos e Medidas Alternativas/01 - CPI e Medidas Alternativas de Núcleo - Variação Anual/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/CPI - EUA/03 Núcleos e Medidas Alternativas/02 - CPI Índice de Difusão/grafico.png",
    "type": "blob"
   },
   {
