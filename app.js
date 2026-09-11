@@ -129,7 +129,8 @@
     return {
       reset: function () { strokes = []; current = null; redraw(); },
       undo: function () { strokes.pop(); redraw(); },
-      hasStrokes: function () { return strokes.length > 0; }
+      hasStrokes: function () { return strokes.length > 0; },
+      desenhando: function () { return !!current; }
     };
   }
 
@@ -177,12 +178,62 @@
       else entrarFullscreen(box);
     });
 
+    /* Em tela cheia os controles passam a ficar sobre o gráfico — não há mais
+       véu escuro em volta para eles ocuparem. Então se escondem sozinhos
+       depois de um tempo parado e voltam a qualquer movimento, toque ou foco
+       de teclado, como nos controles de um player de vídeo.
+
+       Por que não só aparecer no hover: numa tela de toque não existe hover, e
+       um controle invisível até o ponteiro achar a faixa certa não é
+       descobrível. Assim eles aparecem primeiro e só depois somem.
+
+       Fora da tela cheia nada disso vale: lá os controles ficam na margem
+       escura, longe da imagem — a classe só tem efeito sob :fullscreen. */
+    var OCULTAR_APOS = 2600;
+    var timerChrome = null;
+
+    /* `:focus-visible`, não `:focus`: openLightbox foca o ✕ ao abrir e um
+       clique de mouse também deixa o botão focado, então "tem foco dentro"
+       valeria sempre e os controles nunca sumiriam. O que precisa segurá-los
+       é só o foco de teclado — esse sim ficaria preso num botão invisível. */
+    function focoDeTecladoEmControle() {
+      var a = document.activeElement;
+      if (!a || a === box || !box.contains(a)) return false;
+      try { return a.matches(":focus-visible"); }
+      catch (e) { return false; }   // navegador sem :focus-visible: deixa ocultar
+    }
+
+    function mostrarChrome(agendarOcultar) {
+      box.classList.remove("chrome-oculto");
+      if (timerChrome) { clearTimeout(timerChrome); timerChrome = null; }
+      if (!agendarOcultar || !fullscreenEl()) return;
+      timerChrome = setTimeout(function () {
+        timerChrome = null;
+        // Sumir com o foco do teclado dentro deixaria o usuário num botão
+        // invisível; o focusout reinicia a contagem quando ele sair.
+        if (focoDeTecladoEmControle()) return;
+        box.classList.add("chrome-oculto");
+      }, OCULTAR_APOS);
+    }
+
+    box.addEventListener("pointermove", function () {
+      if (annotate.desenhando()) return;   // no meio de um rabisco, não atrapalha
+      mostrarChrome(true);
+    });
+    box.addEventListener("pointerdown", function () { mostrarChrome(true); });
+    // `true` também aqui: quem decide se o foco segura os controles é o timer,
+    // que consulta :focus-visible. Mostrar sem agendar deixaria os controles
+    // presos na tela depois de um foco vindo de clique.
+    box.addEventListener("focusin", function () { mostrarChrome(true); });
+    box.addEventListener("focusout", function () { mostrarChrome(true); });
+
     // O usuário também sai da tela cheia por Escape ou F11, sem passar pelo
     // botão — então quem manda no rótulo é o evento do navegador, não o clique.
     function syncFsBtn() {
       var ativo = !!fullscreenEl();
       fsBtn.textContent = ativo ? "Sair da tela cheia" : "Tela cheia";
       fsBtn.setAttribute("aria-pressed", ativo ? "true" : "false");
+      mostrarChrome(ativo);   // entrou: mostra e agenda; saiu: mostra e fica
     }
     ["fullscreenchange", "webkitfullscreenchange"].forEach(function (tipo) {
       document.addEventListener(tipo, syncFsBtn);
@@ -226,7 +277,7 @@
     });
 
     lightbox = { box: box, img: img, download: download, annotate: annotate,
-                 fsBtn: fsBtn, trigger: null };
+                 fsBtn: fsBtn, mostrarChrome: mostrarChrome, trigger: null };
   }
 
   function openLightbox(chart, triggerEl) {
@@ -237,6 +288,7 @@
     lightbox.download.href = chart.image;
     lightbox.download.setAttribute("download", downloadName(chart));
     lightbox.trigger = triggerEl || null;
+    lightbox.mostrarChrome(false);   // abre sempre com os controles à vista
     lightbox.box.hidden = false;
     document.body.classList.add("lightbox-open");
     lightbox.box.querySelector(".lightbox-close").focus();
@@ -247,6 +299,7 @@
     // Sem isto, fechar pelo ✕ estando em tela cheia deixaria o navegador em
     // tela cheia exibindo um elemento já escondido — tela preta.
     sairFullscreen();
+    lightbox.mostrarChrome(false);   // limpa o timer pendente
     lightbox.box.hidden = true;
     lightbox.img.src = "";
     lightbox.annotate.reset();

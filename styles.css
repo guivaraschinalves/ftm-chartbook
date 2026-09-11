@@ -342,6 +342,30 @@ body.lightbox-open, body.cal-modal-open { overflow: hidden; }
 .lightbox:fullscreen .lightbox-hint { color: rgba(255, 255, 255, 0.85); text-shadow: 0 1px 3px #060605; }
 .lightbox:-webkit-full-screen .lightbox-hint { color: rgba(255, 255, 255, 0.85); text-shadow: 0 1px 3px #060605; }
 
+/* Controles somem sozinhos em tela cheia (ver mostrarChrome no app.js) para
+   não tampar o título do gráfico. `pointer-events: none` junto do opacity
+   evita clique em botão invisível; o foco por teclado continua chegando, e o
+   focusin traz os controles de volta antes de qualquer interação. */
+.lightbox:fullscreen .lightbox-toolbar,
+.lightbox:fullscreen .lightbox-close,
+.lightbox:fullscreen .lightbox-download { transition: opacity 220ms ease; }
+.lightbox:-webkit-full-screen .lightbox-toolbar,
+.lightbox:-webkit-full-screen .lightbox-close,
+.lightbox:-webkit-full-screen .lightbox-download { transition: opacity 220ms ease; }
+
+.lightbox:fullscreen.chrome-oculto .lightbox-toolbar,
+.lightbox:fullscreen.chrome-oculto .lightbox-close,
+.lightbox:fullscreen.chrome-oculto .lightbox-download { opacity: 0; pointer-events: none; }
+.lightbox:-webkit-full-screen.chrome-oculto .lightbox-toolbar,
+.lightbox:-webkit-full-screen.chrome-oculto .lightbox-close,
+.lightbox:-webkit-full-screen.chrome-oculto .lightbox-download { opacity: 0; pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox:fullscreen .lightbox-toolbar,
+  .lightbox:fullscreen .lightbox-close,
+  .lightbox:fullscreen .lightbox-download { transition: none; }
+}
+
 /* ---------- Calendário econômico ---------- */
 /* Link para fora da navegação gerada. Fica FORA de #nav-sections de propósito:
    buildGallery() faz nav.innerHTML = "" a cada carga e apagaria qualquer coisa
