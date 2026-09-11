@@ -1,6 +1,18 @@
 {
- "count": 63,
+ "count": 66,
  "tree": [
+  {
+   "path": "charts/1000 CPI - EUA/01 - CPI e Núcleo do CPI nos Estados Unidos - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/1000 CPI - EUA/02 - Índice de Preços ao Consumidor nos EUA (CPI) e Contribuições - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/1000 CPI - EUA/03 - Ativos do Fed, Fed Funds Rate e CPI/grafico.png",
+   "type": "blob"
+  },
   {
    "path": "charts/Balanço de Pagamentos - Brasil/01 Visão geral/01 - Balanço de Pagamentos do Brasil - Acumulado em 12 meses/grafico.png",
    "type": "blob"
