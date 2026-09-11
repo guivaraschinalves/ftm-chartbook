@@ -57,6 +57,12 @@
   var MES_LONGO = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho",
                    "agosto", "setembro", "outubro", "novembro", "dezembro"];
 
+  function dataCurta(iso) {
+    if (!iso) return "";
+    var d = parseISODate(iso);
+    return d.getDate() + "/" + MES_CURTO[d.getMonth()];
+  }
+
   /* ============================== países / bandeiras ==============================
      Emoji de bandeira está fora de questão: o Windows não tem os glifos de
      indicador regional e renderiza 🇧🇷 como as letras "BR". Arquivo de imagem
@@ -128,17 +134,21 @@
   var RANGE_END = addDays(RANGE_START, 28);       // +4 semanas (início da última)
   var SEMANAS_A_FRENTE = 4;
 
-  var state = { anchor: RANGE_START, paises: {} };
+  var state = { anchor: RANGE_START, paises: {}, atualizando: false, aviso: "" };
   var monthCache = {};
   var meta = { fuso: "", atualizado: "", fontes: "" };
 
   /* ============================== carga ============================== */
-  function loadMonth(key) {
-    if (monthCache[key]) return monthCache[key];
+  /* `forcar` é o botão "Atualizar": ignora o memo desta sessão e manda
+     `cache: "reload"`, que pula o cache do navegador em vez de só revalidar.
+     Também é o que permite sair de um erro de rede — sem ele, uma promessa
+     rejeitada ficaria presa no memo até a página ser recarregada. */
+  function loadMonth(key, forcar) {
+    if (!forcar && monthCache[key]) return monthCache[key];
     // `res.text()` + JSON.parse em vez de res.json(): assim um erro de vírgula
     // no arquivo vira mensagem legível na tela, com o nome do arquivo e a
     // posição do erro, em vez de página em branco.
-    var p = fetch("calendar/" + key + ".json", { cache: "no-cache" })
+    var p = fetch("calendar/" + key + ".json", { cache: forcar ? "reload" : "no-cache" })
       .then(function (res) {
         if (res.status === 404) return { ausente: true, eventos: [] };
         if (!res.ok) throw new Error("HTTP " + res.status);
@@ -154,14 +164,14 @@
     return p;
   }
 
-  function eventosDaSemana(inicio) {
+  function eventosDaSemana(inicio, forcar) {
     var chaves = {}, d, i;
     for (i = 0; i < 7; i++) {
       d = addDays(inicio, i);
       chaves[monthKey(d)] = true;
     }
     var pedidos = [];
-    for (var k in chaves) pedidos.push(loadMonth(k));
+    for (var k in chaves) pedidos.push(loadMonth(k, forcar));
 
     return Promise.all(pedidos).then(function (docs) {
       var todos = [], invalidos = 0;
@@ -390,6 +400,27 @@
     hoje.addEventListener("click", function () { irPara(RANGE_START); });
     barra.appendChild(hoje);
 
+    /* "Atualizar" rebusca os arquivos publicados no repositório. Ele não gera
+       dado novo — quem gera é a rotina de segunda-feira; o botão serve para
+       pegar o que já foi publicado sem depender do cache do navegador. O
+       estado vive em `state` porque render() remonta a barra inteira. */
+    var atualizar = el("button", "chart-action cal-atualizar");
+    atualizar.type = "button";
+    atualizar.textContent = state.atualizando ? "Atualizando…" : "Atualizar";
+    atualizar.disabled = state.atualizando;
+    atualizar.title = "Rebusca os dados publicados, ignorando o cache do navegador.";
+    atualizar.addEventListener("click", function () {
+      state.atualizando = true;
+      state.aviso = "";
+      render(true);
+    });
+    barra.appendChild(atualizar);
+
+    var aviso = el("div", "cal-aviso");
+    aviso.setAttribute("aria-live", "polite");
+    aviso.textContent = state.aviso || "";
+    barra.appendChild(aviso);
+
     var fuso = el("div", "cal-fuso");
     fuso.textContent = meta.fuso || "";
     barra.appendChild(fuso);
@@ -555,15 +586,28 @@
     }
   }
 
-  function render() {
+  /* Devolve a barra ao estado ocioso depois de um "Atualizar", editando os dois
+     nós no lugar. Um segundo render() aqui reentraria no ciclo de carga. */
+  function encerrarAtualizacao(host, texto) {
+    state.atualizando = false;
+    state.aviso = texto;
+    var btn = host.querySelector(".cal-atualizar");
+    if (btn) { btn.disabled = false; btn.textContent = "Atualizar"; }
+    var av = host.querySelector(".cal-aviso");
+    if (av) av.textContent = texto;
+  }
+
+  function render(forcar) {
     var host = document.getElementById("cal-root");
     if (!host) return;
+    var atualizadoAntes = meta.atualizado;
+    if (!forcar) state.aviso = "";   // navegar ou filtrar descarta o recado anterior
     host.innerHTML = "";
     buildToolbar(host);
 
     var carregando = mensagem(host, "Carregando calendário…");
 
-    eventosDaSemana(state.anchor).then(function (res) {
+    eventosDaSemana(state.anchor, forcar).then(function (res) {
       host.removeChild(carregando);
 
       if (res.invalidos) {
@@ -606,12 +650,20 @@
       var rodape = document.getElementById("cal-sources");
       if (rodape && meta.fontes) rodape.textContent = meta.fontes;
       var upd = document.getElementById("cal-updated");
-      if (upd && meta.atualizado) {
-        var d = parseISODate(meta.atualizado);
-        upd.textContent = "Atualizado em " + d.getDate() + "/" + MES_CURTO[d.getMonth()];
+      if (upd && meta.atualizado) upd.textContent = "Atualizado em " + dataCurta(meta.atualizado);
+
+      if (state.atualizando) {
+        // A data que interessa é a de publicação do arquivo, não a hora do
+        // clique: dizer "atualizado agora" sugeriria dado novo quando o
+        // arquivo pode ser o mesmo da semana passada.
+        encerrarAtualizacao(host, meta.atualizado !== atualizadoAntes
+          ? "Dados novos carregados (arquivo de " + dataCurta(meta.atualizado) + ")."
+          : "Você já está com a versão mais recente" +
+            (meta.atualizado ? " (arquivo de " + dataCurta(meta.atualizado) + ")." : "."));
       }
     }).catch(function (e) {
       if (carregando.parentNode) host.removeChild(carregando);
+      if (state.atualizando) encerrarAtualizacao(host, "Falha ao atualizar.");
       var box = el("div", "state-message error");
       var strong = document.createElement("strong");
       strong.textContent = "Não foi possível carregar o calendário.";

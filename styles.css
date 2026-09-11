@@ -353,6 +353,9 @@ body.lightbox-open, body.cal-modal-open { overflow: hidden; }
 .cal-nav-btn:disabled { opacity: 0.35; cursor: default; }
 .cal-nav-btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 .cal-periodo { font-family: var(--font-serif); font-size: 1.05rem; min-width: 15ch; }
+.cal-atualizar:disabled { opacity: 0.55; cursor: default; }
+.cal-aviso { font-size: 0.72rem; color: var(--ink-secondary); }
+.cal-aviso:empty { display: none; }
 .cal-fuso { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-muted); margin-left: auto; }
 
 .cal-week { display: flex; flex-direction: column; }
