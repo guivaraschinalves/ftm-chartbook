@@ -19,6 +19,14 @@
     return svg;
   }
 
+  function hamburgerIcon() {
+    var svg = svgEl("svg", { viewBox: "0 0 16 16", width: "16", height: "16", "aria-hidden": "true" });
+    [4, 8, 12].forEach(function (y) {
+      svg.appendChild(svgEl("line", { x1: "2", y1: String(y), x2: "14", y2: String(y), stroke: "currentColor", "stroke-width": "1.6", "stroke-linecap": "round" }));
+    });
+    return svg;
+  }
+
   function slugify(s) {
     return String(s)
       .toLowerCase()
@@ -212,6 +220,9 @@
         // Sumir com o foco do teclado dentro deixaria o usuário num botão
         // invisível; o focusout reinicia a contagem quando ele sair.
         if (focoDeTecladoEmControle()) return;
+        // Idem com o menu do hambúrguer aberto: some ali dentro um botão de
+        // "sair da tela cheia" clicável, sem dar tempo de clicar nele.
+        if (menuAberto) return;
         box.classList.add("chrome-oculto");
       }, OCULTAR_APOS);
     }
@@ -233,6 +244,7 @@
       var ativo = !!fullscreenEl();
       fsBtn.textContent = ativo ? "Sair da tela cheia" : "Tela cheia";
       fsBtn.setAttribute("aria-pressed", ativo ? "true" : "false");
+      if (!ativo) fecharMenu();   // saiu da tela cheia: o menu-hambúrguer nem aparece fora dela
       mostrarChrome(ativo);   // entrou: mostra e agenda; saiu: mostra e fica
     }
     ["fullscreenchange", "webkitfullscreenchange"].forEach(function (tipo) {
@@ -249,10 +261,77 @@
     clearBtn.addEventListener("click", function () { annotate.reset(); });
     var hint = el("span", "lightbox-hint");
     hint.textContent = "Arraste sobre o gráfico para anotar";
-    toolbar.appendChild(fsBtn);
-    toolbar.appendChild(undoBtn);
-    toolbar.appendChild(clearBtn);
-    toolbar.appendChild(hint);
+
+    // Fora da tela cheia, os botões ficam soltos na margem escura (não
+    // atrapalham nada ali) — mas em tela cheia eles passam a flutuar sobre o
+    // próprio gráfico, então viram um menu de hambúrguer que só abre com um
+    // clique, em vez de três botões brotando a cada movimento do mouse.
+    var inlineWrap = el("div", "lightbox-toolbar-inline");
+    inlineWrap.appendChild(fsBtn);
+    inlineWrap.appendChild(undoBtn);
+    inlineWrap.appendChild(clearBtn);
+    inlineWrap.appendChild(hint);
+
+    var menuBtn = el("button", "lightbox-menu-btn");
+    menuBtn.type = "button";
+    menuBtn.setAttribute("aria-haspopup", "true");
+    menuBtn.setAttribute("aria-expanded", "false");
+    menuBtn.setAttribute("aria-label", "Menu");
+    menuBtn.appendChild(hamburgerIcon());
+
+    var menu = el("div", "lightbox-menu");
+    menu.setAttribute("role", "menu");
+    menu.hidden = true;
+
+    var menuAberto = false;
+    function abrirMenu() {
+      menuAberto = true;
+      menu.hidden = false;
+      menuBtn.setAttribute("aria-expanded", "true");
+      mostrarChrome(false);   // não deixa o menu sumir sozinho enquanto está aberto
+    }
+    function fecharMenu() {
+      menuAberto = false;
+      menu.hidden = true;
+      menuBtn.setAttribute("aria-expanded", "false");
+    }
+    menuBtn.addEventListener("click", function (evt) {
+      evt.stopPropagation();
+      if (menuAberto) fecharMenu(); else abrirMenu();
+    });
+    document.addEventListener("click", function (evt) {
+      if (!menuAberto || evt.target === menuBtn || menu.contains(evt.target)) return;
+      fecharMenu();
+    });
+
+    var menuSairBtn = el("button", "lightbox-menu-item");
+    menuSairBtn.type = "button";
+    menuSairBtn.setAttribute("role", "menuitem");
+    menuSairBtn.textContent = "Sair da tela cheia";
+    menuSairBtn.addEventListener("click", function () { fecharMenu(); sairFullscreen(); });
+
+    var menuUndoBtn = el("button", "lightbox-menu-item");
+    menuUndoBtn.type = "button";
+    menuUndoBtn.setAttribute("role", "menuitem");
+    menuUndoBtn.textContent = "Desfazer";
+    menuUndoBtn.addEventListener("click", function () { fecharMenu(); annotate.undo(); });
+
+    var menuClearBtn = el("button", "lightbox-menu-item");
+    menuClearBtn.type = "button";
+    menuClearBtn.setAttribute("role", "menuitem");
+    menuClearBtn.textContent = "Limpar anotações";
+    menuClearBtn.addEventListener("click", function () { fecharMenu(); annotate.reset(); });
+
+    menu.appendChild(menuSairBtn);
+    menu.appendChild(menuUndoBtn);
+    menu.appendChild(menuClearBtn);
+
+    var menuWrap = el("div", "lightbox-toolbar-menu");
+    menuWrap.appendChild(menuBtn);
+    menuWrap.appendChild(menu);
+
+    toolbar.appendChild(inlineWrap);
+    toolbar.appendChild(menuWrap);
 
     var download = document.createElement("a");
     download.className = "lightbox-download";
@@ -277,7 +356,7 @@
     });
 
     lightbox = { box: box, img: img, download: download, annotate: annotate,
-                 fsBtn: fsBtn, mostrarChrome: mostrarChrome, trigger: null };
+                 fsBtn: fsBtn, mostrarChrome: mostrarChrome, fecharMenu: fecharMenu, trigger: null };
   }
 
   function openLightbox(chart, triggerEl) {
@@ -300,6 +379,7 @@
     // tela cheia exibindo um elemento já escondido — tela preta.
     sairFullscreen();
     lightbox.mostrarChrome(false);   // limpa o timer pendente
+    lightbox.fecharMenu();
     lightbox.box.hidden = true;
     lightbox.img.src = "";
     lightbox.annotate.reset();

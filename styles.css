@@ -78,6 +78,26 @@ body { background: var(--page-bg); }
 .brand-name { font-family: var(--font-serif); font-size: 1.08rem; color: var(--ink); line-height: 1.1; }
 .brand-tag { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-muted); margin-top: 2px; }
 
+/* Alterna modo escuro. Mostra o ícone do tema ATUAL (sol=claro, lua=escuro);
+   sem escolha explícita do usuário (nem :root[data-theme]), segue
+   prefers-color-scheme do sistema — por isso a segunda regra abaixo repete a
+   troca de ícone dentro do media query. */
+.theme-toggle {
+  margin-left: auto; flex: none; width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); background: var(--surface); color: var(--ink-secondary);
+  cursor: pointer; padding: 0;
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--ink-muted); }
+.theme-toggle:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.theme-toggle-moon { display: none; }
+:root[data-theme="dark"] .theme-toggle-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle-moon { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) .theme-toggle-sun { display: none; }
+  :root:not([data-theme="light"]):not([data-theme="dark"]) .theme-toggle-moon { display: block; }
+}
+
 .nav { display: flex; flex-direction: column; gap: 6px; }
 .nav-supergroup { display: flex; flex-direction: column; gap: 2px; }
 .nav-supergroup + .nav-supergroup { margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--border); }
@@ -277,6 +297,7 @@ body.lightbox-open, body.cal-modal-open { overflow: hidden; }
   position: absolute; top: 18px; left: 22px; z-index: 1;
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap; max-width: calc(100% - 90px);
 }
+.lightbox-toolbar-inline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .lightbox-tool-btn {
   font-family: var(--font-mono); font-size: 0.76rem; color: #fff; cursor: pointer;
   background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.25);
@@ -287,6 +308,32 @@ body.lightbox-open, body.cal-modal-open { overflow: hidden; }
 .lightbox-hint {
   font-family: var(--font-mono); font-size: 0.7rem; color: rgba(255, 255, 255, 0.6);
 }
+
+/* Menu de hambúrguer: só existe visualmente em tela cheia (ver regras
+   `:fullscreen` abaixo) — fora dela os botões ficam soltos em
+   .lightbox-toolbar-inline, sem precisar de menu nenhum. */
+.lightbox-toolbar-menu { display: none; position: relative; }
+.lightbox-menu-btn {
+  color: #fff; cursor: pointer; width: 34px; height: 34px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 7px;
+}
+.lightbox-menu-btn:hover, .lightbox-menu-btn[aria-expanded="true"] { background: rgba(255, 255, 255, 0.24); }
+.lightbox-menu-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.lightbox-menu {
+  position: absolute; top: calc(100% + 8px); left: 0; z-index: 2;
+  display: flex; flex-direction: column; gap: 2px; min-width: 190px;
+  background: rgba(10, 10, 9, 0.94); border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px; padding: 6px; box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
+}
+.lightbox-menu[hidden] { display: none; }
+.lightbox-menu-item {
+  font-family: var(--font-mono); font-size: 0.78rem; color: #fff; text-align: left;
+  background: none; border: none; border-radius: 6px; padding: 9px 10px; cursor: pointer;
+}
+.lightbox-menu-item:hover { background: rgba(255, 255, 255, 0.14); }
+.lightbox-menu-item:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
 .lightbox-close {
   position: absolute; top: 18px; right: 22px; width: 38px; height: 38px; border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.08); color: #fff;
@@ -341,6 +388,22 @@ body.lightbox-open, body.cal-modal-open { overflow: hidden; }
 
 .lightbox:fullscreen .lightbox-hint { color: rgba(255, 255, 255, 0.85); text-shadow: 0 1px 3px #060605; }
 .lightbox:-webkit-full-screen .lightbox-hint { color: rgba(255, 255, 255, 0.85); text-shadow: 0 1px 3px #060605; }
+
+.lightbox:fullscreen .lightbox-menu-btn { background: rgba(6, 6, 5, 0.72); }
+.lightbox:-webkit-full-screen .lightbox-menu-btn { background: rgba(6, 6, 5, 0.72); }
+.lightbox:fullscreen .lightbox-menu-btn:hover,
+.lightbox:fullscreen .lightbox-menu-btn[aria-expanded="true"] { background: rgba(6, 6, 5, 0.9); }
+.lightbox:-webkit-full-screen .lightbox-menu-btn:hover,
+.lightbox:-webkit-full-screen .lightbox-menu-btn[aria-expanded="true"] { background: rgba(6, 6, 5, 0.9); }
+
+/* Fora da tela cheia: botões soltos. Em tela cheia: os mesmos botões viram
+   um menu de hambúrguer (pedido explícito — três controles flutuando sobre
+   o próprio gráfico a cada movimento do mouse era demais; um ícone só, que
+   só abre com clique, é bem menos intrusivo). */
+.lightbox:fullscreen .lightbox-toolbar-inline { display: none; }
+.lightbox:-webkit-full-screen .lightbox-toolbar-inline { display: none; }
+.lightbox:fullscreen .lightbox-toolbar-menu { display: flex; }
+.lightbox:-webkit-full-screen .lightbox-toolbar-menu { display: flex; }
 
 /* Controles somem sozinhos em tela cheia (ver mostrarChrome no app.js) para
    não tampar o título do gráfico. `pointer-events: none` junto do opacity
