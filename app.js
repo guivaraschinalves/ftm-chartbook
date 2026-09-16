@@ -238,6 +238,21 @@
     box.addEventListener("focusin", function () { mostrarChrome(true); });
     box.addEventListener("focusout", function () { mostrarChrome(true); });
 
+    // O top:13% fixo do CSS assume a proporção 16:9 dos gráficos — mas o
+    // viewport nem sempre é 16:9, e aí a imagem entra "letterboxed" (sobra
+    // faixa preta acima/abaixo dela) e a mesma percentagem do viewport passa
+    // a cair num ponto diferente da imagem, podendo cobrir o título de novo.
+    // Medindo o retângulo real da <img> aqui e plotando o menu a ~11,5% da
+    // altura DELA (não do viewport), o menu acompanha o título+subtítulo do
+    // gráfico não importa a proporção da tela.
+    function posicionarToolbarFullscreen() {
+      if (!fullscreenEl()) { toolbar.style.top = ""; return; }
+      var r = img.getBoundingClientRect();
+      if (!r.height) return;
+      toolbar.style.top = (r.top + r.height * 0.115) + "px";
+    }
+    window.addEventListener("resize", posicionarToolbarFullscreen);
+
     // O usuário também sai da tela cheia por Escape ou F11, sem passar pelo
     // botão — então quem manda no rótulo é o evento do navegador, não o clique.
     function syncFsBtn() {
@@ -246,6 +261,7 @@
       fsBtn.setAttribute("aria-pressed", ativo ? "true" : "false");
       if (!ativo) fecharMenu();   // saiu da tela cheia: o menu-hambúrguer nem aparece fora dela
       mostrarChrome(ativo);   // entrou: mostra e agenda; saiu: mostra e fica
+      posicionarToolbarFullscreen();
     }
     ["fullscreenchange", "webkitfullscreenchange"].forEach(function (tipo) {
       document.addEventListener(tipo, syncFsBtn);

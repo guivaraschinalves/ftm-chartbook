@@ -98,6 +98,22 @@ body { background: var(--page-bg); }
   :root:not([data-theme="light"]):not([data-theme="dark"]) .theme-toggle-moon { display: block; }
 }
 
+/* Tela cheia da página inteira (sidebar + conteúdo, via Fullscreen API do
+   navegador) — não confundir com a tela cheia do lightbox de gráfico, que
+   tem seu próprio botão e CSS mais abaixo. */
+.page-fullscreen-toggle {
+  flex: none; width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); background: var(--surface); color: var(--ink-secondary);
+  cursor: pointer; padding: 0;
+}
+.page-fullscreen-toggle:hover { color: var(--ink); border-color: var(--ink-muted); }
+.page-fullscreen-toggle:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.page-fullscreen-toggle[hidden] { display: none; }
+.page-fullscreen-toggle .fs-exit-icon { display: none; }
+.page-fullscreen-toggle[aria-pressed="true"] .fs-enter-icon { display: none; }
+.page-fullscreen-toggle[aria-pressed="true"] .fs-exit-icon { display: block; }
+
 .nav { display: flex; flex-direction: column; gap: 6px; }
 .nav-supergroup { display: flex; flex-direction: column; gap: 2px; }
 .nav-supergroup + .nav-supergroup { margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--border); }
@@ -415,10 +431,14 @@ body.lightbox-open, body.cal-modal-open { overflow: hidden; }
 
 /* Em tela cheia o título do próprio gráfico (desenhado dentro da imagem, não
    é HTML nosso) costuma ocupar o canto superior esquerdo — desce o
-   hambúrguer um pouco (% da tela, não px fixo, pra acompanhar qualquer
-   resolução) pra não cobrir o título. */
-.lightbox:fullscreen .lightbox-toolbar { top: 17%; }
-.lightbox:-webkit-full-screen .lightbox-toolbar { top: 17%; }
+   hambúrguer um pouco pra não cobrir o título. Este top:13% é só o valor
+   inicial (evita um pulo visual antes do JS calcular); quem manda de
+   verdade é posicionarToolbarFullscreen() no app.js, que mede a altura real
+   da imagem — necessário porque a proporção do viewport quase nunca é
+   exatamente 16:9 igual aos gráficos, e uma % fixa do viewport cai em
+   pontos diferentes da imagem dependendo do quanto ela fica "letterboxed". */
+.lightbox:fullscreen .lightbox-toolbar { top: 13%; }
+.lightbox:-webkit-full-screen .lightbox-toolbar { top: 13%; }
 
 /* Controles somem sozinhos em tela cheia (ver mostrarChrome no app.js) para
    não tampar o título do gráfico. `pointer-events: none` junto do opacity
