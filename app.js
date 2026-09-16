@@ -404,11 +404,16 @@
     return { order: order, title: title, subtitle: subtitle };
   }
 
-  // "02 Conta corrente" -> {order: 2, label: "Conta corrente"}
+  // "02 Conta corrente" -> {order: 2, label: "Conta corrente"}. A trailing
+  // "!" (e.g. "00 Superquarta - 16 de Setembro !") marks the folder as a
+  // featured/special assunto — stripped from the label, surfaced as
+  // `featured: true` for buildGallery() to highlight in the sidebar.
   function parseSectionFolder(name) {
-    var m = name.match(/^(\d+)\s+(.+)$/);
-    if (m) return { order: parseInt(m[1], 10), label: m[2].trim() };
-    return { order: 999, label: name };
+    var featured = /\s*!\s*$/.test(name);
+    var cleaned = name.replace(/\s*!\s*$/, "");
+    var m = cleaned.match(/^(\d+)\s+(.+)$/);
+    if (m) return { order: parseInt(m[1], 10), label: m[2].trim(), featured: featured };
+    return { order: 999, label: cleaned, featured: featured };
   }
 
   // manifest.json is regenerated on every push that touches charts/ (see
@@ -489,7 +494,7 @@
     function ensureGroup(name) {
       if (!groupsByName[name]) {
         var g = parseSectionFolder(name);
-        groupsByName[name] = { id: slugify(name), order: g.order, label: g.label };
+        groupsByName[name] = { id: slugify(name), order: g.order, label: g.label, featured: g.featured };
       }
       return groupsByName[name];
     }
@@ -677,7 +682,7 @@
           // extra JS needed for the toggle itself. This applies to every
           // group automatically, current or future, since it's driven by
           // folder discovery, not a hardcoded name.
-          var groupWrap = el("details", "chart-group");
+          var groupWrap = el("details", "chart-group" + (sec.group.featured ? " is-featured" : ""));
           var groupHeading = el("summary", "group-heading");
           var gh1 = document.createElement("h2");
           gh1.textContent = sec.group.label;
@@ -692,7 +697,7 @@
           groupHost = groupWrap;
 
           if (nav) {
-            var navGroupWrap = el("details", "nav-supergroup");
+            var navGroupWrap = el("details", "nav-supergroup" + (sec.group.featured ? " is-featured" : ""));
             var navGroupLabel = el("summary", "nav-supergroup-label");
             var navGroupText = document.createElement("span");
             navGroupText.textContent = sec.group.label;

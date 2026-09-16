@@ -1,6 +1,126 @@
 {
- "count": 66,
+ "count": 96,
  "tree": [
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/01 Juros - EUA/01 - Futuros da Taxa de Juros do Fed/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/01 Juros - EUA/02 - Fed Funds Rate e os Ciclos de Aperto Monetário/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/02 Inflação - EUA/01 - Ativos do Fed, Fed Funds Rate e CPI/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/02 Inflação - EUA/02 - CPI e Núcleo do CPI nos Estados Unidos/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/02 Inflação - EUA/03 - Índice de Preços ao Consumidor nos EUA (CPI) e Contribuições/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/02 Inflação - EUA/04 - Ativos do Fed, Fed Funds Rate, PCE e Núcleo (Core) do PCE/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/03 Mercado de Trabalho - EUA/01 - Criação Líquida de Empregos nos EUA (Payroll) - Por Setor, 1 e 12 Meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/03 Mercado de Trabalho - EUA/02 - Criação Líquida de Empregos nos EUA (Payroll) - Média Móvel de 3 Meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/03 Mercado de Trabalho - EUA/03 - Força de Trabalho e Desemprego nos EUA/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/04 LEI - EUA/01 - Índice Antecedente (LEI) dos EUA/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/04 LEI - EUA/02 - Contribuição dos Componentes do LEI/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/04 LEI - EUA/03 - Spread entre Taxa do Título de 10 anos e Taxa Básica de Juros nos EUA/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/04 LEI - EUA/04 - Confiança do Consumidor nos EUA/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/05 Juros - Brasil/01 - Taxa Selic Over Anualizada/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/06 Inflação - Brasil/01 - Taxa Selic Meta, IPCA e Meta para a Inflação/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/06 Inflação - Brasil/02 - Contribuição para o IPCA por Grupo - Acumulado em 3 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/06 Inflação - Brasil/03 - Contribuição para o IPCA por Grupo - Acumulado em 12 meses/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/06 Inflação - Brasil/04 - IPCA Cheio e Média dos Núcleos/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/06 Inflação - Brasil/05 - IPCA Serviços/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/06 Inflação - Brasil/06 - IPCA Não Duráveis, Semiduráveis e Duráveis/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/07 Crédito, Moeda e Fiscal/01 - Resultado Primário e Nominal do Setor Público Consolidado/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/07 Crédito, Moeda e Fiscal/02 - Variação Anual da Base Monetária Restrita/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/07 Crédito, Moeda e Fiscal/03 - Variação Anual da Base Monetária Ampliada/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/07 Crédito, Moeda e Fiscal/04 - Variação Anual do Agregado Monetário M2/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/07 Crédito, Moeda e Fiscal/05 - Concessões de Crédito/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/07 Crédito, Moeda e Fiscal/06 - Saldo de Crédito por Controle de Capital/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/07 Crédito, Moeda e Fiscal/07 - Inadimplência/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/07 Crédito, Moeda e Fiscal/08 - Comprometimento da Renda Mensal com os Juros da Dívida vs. Taxa Selic/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/08 Dados do IBC-Br hoje/01 - IBC-Br e IBC-Br ex-agropecuária - Variação Mensal com Ajuste Sazonal/grafico.png",
+   "type": "blob"
+  },
+  {
+   "path": "charts/00 Superquarta - 16 de Setembro !/08 Dados do IBC-Br hoje/02 - IBC-Br e IBC-Br Ex-Agro - Variação em 12 Meses/grafico.png",
+   "type": "blob"
+  },
   {
    "path": "charts/01 Balanço de Pagamentos - Brasil/01 Visão geral/01 - Balanço de Pagamentos do Brasil - Acumulado em 12 meses/grafico.png",
    "type": "blob"

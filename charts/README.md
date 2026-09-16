@@ -104,6 +104,15 @@ algum) — mesma regra do número em qualquer nível de pasta, um nível acima
 do tema. Temas sem esse nível extra continuam funcionando normalmente (dá
 pra misturar temas soltos com assuntos agrupados).
 
+### Destacando um assunto especial (edição/evento)
+
+Termine o nome da pasta do assunto com `!` (ex: `"00 Superquarta - 16 de
+Setembro !"`) para que ele apareça em azul, em destaque, no menu lateral —
+útil pra uma edição especial ligada a um evento (decisão de juros, dado
+extraordinário) que você quer que salte aos olhos entre os assuntos de
+sempre. O `!` não aparece no nome exibido; sem ele, o assunto é tratado
+normalmente.
+
 A ordem dos níveis é sempre **assunto → tema → slot → gráfico** — não crie
 pastas dentro da pasta-slot (o nível mais profundo é sempre o arquivo de
 imagem).
