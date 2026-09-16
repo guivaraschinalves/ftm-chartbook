@@ -405,6 +405,13 @@ body.lightbox-open, body.cal-modal-open { overflow: hidden; }
 .lightbox:fullscreen .lightbox-toolbar-menu { display: flex; }
 .lightbox:-webkit-full-screen .lightbox-toolbar-menu { display: flex; }
 
+/* Em tela cheia o título do próprio gráfico (desenhado dentro da imagem, não
+   é HTML nosso) costuma ocupar o canto superior esquerdo — desce o
+   hambúrguer um pouco (% da tela, não px fixo, pra acompanhar qualquer
+   resolução) pra não cobrir o título. */
+.lightbox:fullscreen .lightbox-toolbar { top: 17%; }
+.lightbox:-webkit-full-screen .lightbox-toolbar { top: 17%; }
+
 /* Controles somem sozinhos em tela cheia (ver mostrarChrome no app.js) para
    não tampar o título do gráfico. `pointer-events: none` junto do opacity
    evita clique em botão invisível; o foco por teclado continua chegando, e o
